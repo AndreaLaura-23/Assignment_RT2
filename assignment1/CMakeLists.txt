@@ -14,6 +14,7 @@ find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
@@ -27,6 +28,7 @@ include_directories(include)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/UiGoal.msg"
   "action/NavigateToPose.action"
+  DEPENDENCIES std_msgs geometry_msgs
 )
 
 rosidl_get_typesupport_target(cpp_typesupport_target
@@ -45,7 +47,9 @@ ament_target_dependencies(action_server
   rclcpp
   rclcpp_action
   rclcpp_components
+  std_msgs
   geometry_msgs
+  nav_msgs
   tf2
   tf2_ros
   tf2_geometry_msgs
@@ -71,6 +75,9 @@ ament_target_dependencies(action_client
   rclcpp_action
   rclcpp_components
   std_msgs
+  geometry_msgs
+  tf2
+  tf2_ros
 )
 
 target_link_libraries(action_client

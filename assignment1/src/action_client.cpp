@@ -45,6 +45,7 @@ void ActionClient::goal_callback(const assignment1::msg::UiGoal::SharedPtr msg)
     msg->x, msg->y, msg->theta);
 
   send_goal(msg->x, msg->y, msg->theta);
+}
 
   void ActionClient::send_goal(double x_goal, double y_goal, double theta_goal)
 {
@@ -52,6 +53,7 @@ void ActionClient::goal_callback(const assignment1::msg::UiGoal::SharedPtr msg)
     RCLCPP_ERROR(this->get_logger(), "Action server not available");
     return;
   }
+
 
   geometry_msgs::msg::TransformStamped t;
 
@@ -112,8 +114,7 @@ void ActionClient::cancel_callback(const std_msgs::msg::Bool::SharedPtr msg)
   cancel_sent_ = true;
 }
 
-void ActionClient::goal_response_callback(
-  const GoalHandleNavigate::SharedPtr & goal_handle)
+void ActionClient::goal_response_callback( const GoalHandleNavigate::SharedPtr & goal_handle)
 {
   if (!goal_handle) {
     RCLCPP_ERROR(this->get_logger(), "Goal rejected by the server");
@@ -126,9 +127,7 @@ void ActionClient::goal_response_callback(
   RCLCPP_INFO(this->get_logger(), "Goal accepted by the server");
 }
 
-void ActionClient::feedback_callback(
-  GoalHandleNavigate::SharedPtr,
-  const std::shared_ptr<const NavigateToPose::Feedback> feedback)
+void ActionClient::feedback_callback( GoalHandleNavigate::SharedPtr, const std::shared_ptr<const NavigateToPose::Feedback> feedback)
 {
   RCLCPP_INFO(
     this->get_logger(),
@@ -140,8 +139,7 @@ void ActionClient::feedback_callback(
     feedback->angle_error);
 }
 
-void ActionClient::result_callback(
-  const GoalHandleNavigate::WrappedResult & result)
+void ActionClient::result_callback( const GoalHandleNavigate::WrappedResult & result)
 {
   current_goal_handle_.reset();
 
@@ -182,7 +180,6 @@ void ActionClient::result_callback(
   }
 }
 
-}
 }
 
 RCLCPP_COMPONENTS_REGISTER_NODE(assignment1::ActionClient)
