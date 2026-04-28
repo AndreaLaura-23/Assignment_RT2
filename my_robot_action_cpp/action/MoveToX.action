@@ -1,7 +1,0 @@
-float64 target_x
----
-bool success
-string message
----
-float64 current_x
-float64 distance_remaining
