@@ -26,17 +26,11 @@ public:
   UserInterface()
   : Node("user_interface")
   {
-    goal_pub_ = this->create_publisher<assignment1::msg::UiGoal>(
-      "/ui_goal",
-      10);
+    goal_pub_ = this->create_publisher<assignment1::msg::UiGoal>("/ui_goal", 10);
 
-    cancel_pub_ = this->create_publisher<std_msgs::msg::Bool>(
-      "/ui_cancel",
-      10);
+    cancel_pub_ = this->create_publisher<std_msgs::msg::Bool>( "/ui_cancel", 10);
 
-    status_sub_ = this->create_subscription<std_msgs::msg::String>(
-      "/goal_status",
-      10,
+    status_sub_ = this->create_subscription<std_msgs::msg::String>( "/goal_status", 10,
       std::bind(&UserInterface::status_callback, this, std::placeholders::_1));
 
     RCLCPP_INFO(this->get_logger(), "User interface node started");

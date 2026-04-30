@@ -24,38 +24,23 @@ using std::placeholders::_2;
 ActionServer::ActionServer(const rclcpp::NodeOptions & options)
 : Node("action_server", options)
 {
-  cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>(
-    "/cmd_vel",
-    10);
+  cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
 
-  odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-    "/odom",
-    10,
-    std::bind(&ActionServer::odom_callback, this, _1));
+  odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>("/odom", 10, std::bind(&ActionServer::odom_callback, this, _1));
 
-  goal_frame_ = this->declare_parameter<std::string>(
-    "target_frame_name",
-    "goal_frame");
+  goal_frame_ = this->declare_parameter<std::string>("target_frame_name", "goal_frame");
 
-  moved_frame_ = this->declare_parameter<std::string>(
-    "moved_frame_name",
-    "base_link");
+  moved_frame_ = this->declare_parameter<std::string>("moved_frame_name", "base_link");
 
-  world_frame_ = this->declare_parameter<std::string>(
-    "world_frame_name",
-    "odom");
+  world_frame_ = this->declare_parameter<std::string>("world_frame_name", "odom");
 
-  tf_broadcaster_ =
-    std::make_shared<tf2_ros::TransformBroadcaster>(this);
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
-  static_broadcaster_ =
-    std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+  static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 
-  tf_buffer_ =
-    std::make_unique<tf2_ros::Buffer>(this->get_clock());
+  tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
 
-  tf_listener_ =
-    std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
   geometry_msgs::msg::TransformStamped static_tf;
   static_tf.header.stamp = this->get_clock()->now();
@@ -85,9 +70,7 @@ ActionServer::ActionServer(const rclcpp::NodeOptions & options)
 
   tf_broadcaster_->sendTransform(t_init);
 
-  action_server_ = rclcpp_action::create_server<NavigateToPose>(
-    this,
-    "/navigate_to_pose",
+  action_server_ = rclcpp_action::create_server<NavigateToPose>( this, "/navigate_to_pose",
     std::bind(&ActionServer::handle_goal, this, _1, _2),
     std::bind(&ActionServer::handle_cancel, this, _1),
     std::bind(&ActionServer::handle_accepted, this, _1));
@@ -126,8 +109,7 @@ rclcpp_action::GoalResponse ActionServer::handle_goal(
   return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
 
-rclcpp_action::CancelResponse ActionServer::handle_cancel(
-  const std::shared_ptr<GoalHandleNavigate> goal_handle)
+rclcpp_action::CancelResponse ActionServer::handle_cancel( const std::shared_ptr<GoalHandleNavigate> goal_handle)
 {
   (void)goal_handle;
 
@@ -153,8 +135,7 @@ void ActionServer::stop_robot()
   cmd_vel_pub_->publish(velocity);
 }
 
-void ActionServer::execute(
-  const std::shared_ptr<GoalHandleNavigate> goal_handle)
+void ActionServer::execute( const std::shared_ptr<GoalHandleNavigate> goal_handle)
 {
   RCLCPP_INFO(this->get_logger(), "Execution of the goal started");
 
@@ -205,8 +186,7 @@ void ActionServer::execute(
     const double x_error = t.transform.translation.x;
     const double y_error = t.transform.translation.y;
 
-    const double distance_error =
-      std::sqrt(std::pow(x_error, 2) + std::pow(y_error, 2));
+    const double distance_error = std::sqrt(std::pow(x_error, 2) + std::pow(y_error, 2));
 
     const double angle_error = std::atan2(y_error, x_error);
 
