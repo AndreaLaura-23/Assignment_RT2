@@ -24,22 +24,24 @@ using std::placeholders::_2;
 ActionServer::ActionServer(const rclcpp::NodeOptions & options)
 : Node("action_server", options)
 {
+  // Publisher
   cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
-
+  
+  // Subscriber
   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>("/odom", 10, std::bind(&ActionServer::odom_callback, this, _1));
 
+  // Parameters
   goal_frame_ = this->declare_parameter<std::string>("target_frame_name", "goal_frame");
-
   moved_frame_ = this->declare_parameter<std::string>("moved_frame_name", "base_footprint");
-
   world_frame_ = this->declare_parameter<std::string>("world_frame_name", "odom");
 
+  // Broadcaster
   tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
   static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 
+  // Listener
   tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
-
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
   geometry_msgs::msg::TransformStamped static_tf;
@@ -70,6 +72,7 @@ ActionServer::ActionServer(const rclcpp::NodeOptions & options)
 
   tf_broadcaster_->sendTransform(t_init);
 
+  // action
   action_server_ = rclcpp_action::create_server<NavigateToPose>( this, "/navigate_to_pose",
     std::bind(&ActionServer::handle_goal, this, _1, _2),
     std::bind(&ActionServer::handle_cancel, this, _1),

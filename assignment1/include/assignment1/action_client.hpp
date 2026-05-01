@@ -33,15 +33,11 @@ private:
 
   void send_goal(double x_goal, double y_goal, double theta_goal);
 
-  void goal_response_callback(
-    const GoalHandleNavigate::SharedPtr & goal_handle);
+  void goal_response_callback(const GoalHandleNavigate::SharedPtr & goal_handle);
 
-  void feedback_callback(
-    GoalHandleNavigate::SharedPtr,
-    const std::shared_ptr<const NavigateToPose::Feedback> feedback);
+  void feedback_callback(GoalHandleNavigate::SharedPtr, const std::shared_ptr<const NavigateToPose::Feedback> feedback);
 
-  void result_callback(
-    const GoalHandleNavigate::WrappedResult & result);
+  void result_callback(const GoalHandleNavigate::WrappedResult & result);
 
   rclcpp_action::Client<NavigateToPose>::SharedPtr action_client_;
 

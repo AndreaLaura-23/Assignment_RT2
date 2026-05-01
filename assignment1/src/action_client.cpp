@@ -19,18 +19,19 @@ using namespace std::placeholders;
 
 ActionClient::ActionClient(const rclcpp::NodeOptions & options) : Node("action_client", options), cancel_sent_(false)
 {
+  // Action
   action_client_ = rclcpp_action::create_client<NavigateToPose>( this, "/navigate_to_pose");
 
+  // Subscriber
   goal_sub_ = this->create_subscription<assignment1::msg::UiGoal>( "/ui_goal", 10, std::bind(&ActionClient::goal_callback, this, _1));
-  
   cancel_sub_ = this->create_subscription<std_msgs::msg::Bool>( "/ui_cancel", 10, std::bind(&ActionClient::cancel_callback, this, _1));
-
   status_pub_ = this->create_publisher<std_msgs::msg::String>( "/goal_status", 10);
 
+  // Broadcaster
   static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 
+  // Parameters
   goal_frame_name_ = this->declare_parameter<std::string>( "target_frame_name", "goal_frame");
-
   world_frame_name_ = this->declare_parameter<std::string>( "world_frame_name", "odom");
 
   RCLCPP_INFO(this->get_logger(), "Action Client started");

@@ -39,24 +39,18 @@ private:
   rclcpp_action::CancelResponse handle_cancel(
     const std::shared_ptr<GoalHandleNavigate> goal_handle);
 
-  void handle_accepted(
-    const std::shared_ptr<GoalHandleNavigate> goal_handle);
+  void handle_accepted(const std::shared_ptr<GoalHandleNavigate> goal_handle);
 
   void stop_robot();
 
-  void execute(
-    const std::shared_ptr<GoalHandleNavigate> goal_handle);
+  void execute(const std::shared_ptr<GoalHandleNavigate> goal_handle);
 
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
-
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
 
   std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
-
   std::shared_ptr<tf2_ros::StaticTransformBroadcaster> static_broadcaster_;
-
   std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
-
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 
   rclcpp_action::Server<NavigateToPose>::SharedPtr action_server_;
