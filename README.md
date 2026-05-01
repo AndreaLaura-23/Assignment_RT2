@@ -86,14 +86,14 @@ float64 theta
 
 This node handles communication between the user interface and the action server.
 
-**It:**
+#### **It:**
 - subscribes to `/ui_goal` to receive target poses  
 - subscribes to `/ui_cancel` to receive cancel requests  
 - publishes goal status on `/goal_status`  
 - creates a static TF transform (`odom → goal_frame`) representing the target pose  
 - sends the goal asynchronously to the action server  
 
-**Callbacks:**
+#### **Callbacks:**
 - `goal_response_callback` — logs whether the goal is accepted or rejected  
 - `feedback_callback` — prints real-time navigation feedback  
 - `result_callback` — handles final result and publishes goal status (`SUCCEEDED`, `CANCELLED`, `ABORTED`)  
@@ -104,19 +104,19 @@ This node handles communication between the user interface and the action server
 
 This node implements the navigation logic of the robot.
 
-**It:**
+#### **It:**
 - subscribes to `/odom` and broadcasts the robot pose as a TF transform  
 - publishes velocity commands on `/cmd_vel`  
 - uses a TF2 listener and buffer to compute the transform between robot and goal  
 
-**Execution logic:**
+#### **Execution logic:**
 - continuously computes the transform `base_footprint → goal_frame`  
 - calculates distance and angle error  
 - moves the robot proportionally to the error  
 - aligns the robot orientation at the end  
 - stops when the goal is reached within a tolerance  
 
-**Callbacks:**
+#### **Callbacks:**
 - `handle_goal` — accepts incoming goals  
 - `handle_cancel` — handles cancellation requests  
 - `execute` — runs in a separate thread and performs navigation  
@@ -127,13 +127,13 @@ This node implements the navigation logic of the robot.
 
 This node provides a command-line interface for user interaction.
 
-**It:**
+#### **It:**
 - allows the user to input target `(x, y, theta)`  
 - publishes goals on `/ui_goal`  
 - publishes cancel requests on `/ui_cancel`  
 - subscribes to `/goal_status` to monitor execution  
 
-**Features:**
+#### **Features:**
 - supports real-time cancellation using `c + ENTER`  
 - uses multithreading and `select()` for non-blocking input  
 - uses pipes to safely interrupt input threads  
@@ -157,9 +157,9 @@ base_footprint → goal_frame
 ```
 When the distance error is below the threshold, the goal is considered reached. 
 
-**HOW TO RUN**
+## **HOW TO RUN**
 
-### 1. First build the workspace
+### First build the workspace
 
 ```bash
 colcon build
@@ -171,13 +171,13 @@ The system is started by a single launch file that brings up three elements:
 ros2 launch assignment1 launch.py
 ```
 
-### 1) Simulation Environment
+#### 1) Simulation Environment
 → Includes the `bme_gazebo_sensors` package launch, runs the robot simulation and publishes odometry on `/odom`
 
-### 2) Components (Action Server + Client)
+#### 2) Components (Action Server + Client)
 → handle navigation logic and communication using ROS 2 actions and TF2
 
-### 3) User Interface
+#### 3) User Interface
 → allows the user to input target poses (x, y, theta) and cancel goals interactively
 
 ---
@@ -185,5 +185,5 @@ ros2 launch assignment1 launch.py
 It is suggested on Rviz window to add the TF frames and switch from fixed frame to odom. In this way it is possible to see the robot's motion from the point of view ofr the world odom. 
 
 ---
-### Author
+## Author
 Andrea Laura --- andrelaura1.al@gmail.com
